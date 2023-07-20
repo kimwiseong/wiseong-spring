@@ -35,18 +35,18 @@ public class Diary {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "create_date")
+    @Column(name = "create_date", nullable = false)
     private Timestamp createDate;
 
-    @Enumerated(EnumType.STRING)
-    private DiaryStatus status;
+    @Column(name = "status", nullable = false)
+    private Boolean status;
 
 //    @ManyToOne(fetch = LAZY)
 //    @JoinColumn(name = "user_id")
 //    private User user;
 
     @Builder
-    public Diary(Long id, String title, String content, Timestamp createDate, DiaryStatus status) {
+    public Diary(Long id, String title, String content, Timestamp createDate, Boolean status) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -61,7 +61,7 @@ public class Diary {
     }
 
     public void inactive() {
-        status = DiaryStatus.INACTIVE;
+        status = false;
     }
 
 }

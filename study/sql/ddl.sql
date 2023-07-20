@@ -9,7 +9,7 @@ create table diary (
     title VARCHAR(30) NOT NULL,
     content text NOT NULL,
     created_date TIMESTAMP,
-    status VARCHAR(10) DEFAULT "ACTIVE",
+    status BOOLEAN DEFAULT TRUE,
     user_id long,
 
     PRIMARY KEY (id),
