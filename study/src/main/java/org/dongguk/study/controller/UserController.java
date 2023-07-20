@@ -16,6 +16,6 @@ public class UserController {
 
     @GetMapping("/user")
     public UserDto readUserProfile() {
-        return userService.readUserProfile();
+        return userService.readUserProfile(0L);
     }
 }

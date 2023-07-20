@@ -1,11 +1,16 @@
 package org.dongguk.study.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dongguk.study.domain.Diary;
 import org.dongguk.study.dto.request.DiaryCreateDto;
+import org.dongguk.study.dto.request.DiaryUpdateDto;
 import org.dongguk.study.dto.response.DiaryReadDto;
+import org.dongguk.study.repository.DiaryRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Slf4j
@@ -13,24 +18,52 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DiaryService {
 
-    public DiaryReadDto read(Long diaryId) {
+    private final DiaryRepository diaryRepository;
+
+    public void create(DiaryCreateDto diaryCreate) {
+        Diary diary = Diary.builder()
+                .title(diaryCreate.getTitle())
+                .content(diaryCreate.getContent())
+                .build();
+
+        diaryRepository.save(diary);
+    }
+
+    public DiaryReadDto read(Long id) {
+        Diary diary = diaryRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("not found diary"));
+
         return DiaryReadDto.builder()
-                .id(0L)
-                .name("김위성")
-                .title("title1")
-                .content("content1")
+                .id(diary.getId())
+                .title(diary.getTitle())
+                .content(diary.getContent())
                 .build();
     }
 
-    public void create(DiaryCreateDto diaryCreate) {
-//        Diary diary = Diary.builder()
-//                .title(diaryCreate.getTitle())
-//                .content(diaryCreate.getContent())
-//                .build();
+    @Transactional
+    public void edit(Long id, DiaryUpdateDto diaryUpdateDto) {
+        Diary diary = diaryRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("not found diary"));
 
-
-        log.info("title = {}", diaryCreate.getTitle());
-        log.info("content = {}", diaryCreate.getContent());
-//        diaryRepository.create(diary)
+        diary.edit(diaryUpdateDto.getTitle(),
+                diaryUpdateDto.getContent());
     }
+
+    @Transactional
+    public void inactive(Long id) {
+        Diary diary = diaryRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("not found diary"));
+
+        diary.inactive();
+    }
+
+    public void delete(Long id) {
+        Diary diary = diaryRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("not found diary"));
+
+        diaryRepository.delete(diary);
+
+    }
+
+
 }

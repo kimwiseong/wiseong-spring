@@ -6,10 +6,10 @@ import lombok.Getter;
 
 @Getter
 public class DiaryCreateDto {
-    Long id;
-    String name;
-    String title;
-    String content;
+    private Long id;
+    private String name;
+    private String title;
+    private String content;
 
     @Builder
     public DiaryCreateDto(Long id, String name, String title, String content) {
